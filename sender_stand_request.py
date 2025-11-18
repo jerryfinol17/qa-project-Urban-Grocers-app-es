@@ -10,16 +10,12 @@ def post_new_user(body):
         headers=data.headers
     )
 
-user_response = post_new_user(data.user_body)
-print(user_response.status_code)
-print( user_response.json())
-
-
-if user_response.status_code == 201:
-    auth_token = user_response.json().get("authToken")
-    if auth_token:
-        print( auth_token)
-
+def get_auth_token():
+    response = post_new_user(data.user_body)
+    assert response.status_code == 201
+    auth_token=response.json().get("authToken")
+    assert auth_token is not None, "No auth token returned"
+    return auth_token
 
 def post_new_kit(auth_token, kit_body):
 
@@ -29,8 +25,4 @@ def post_new_kit(auth_token, kit_body):
                 json=kit_body,
                 headers=headers
             )
-
-kit_response = post_new_kit(auth_token, data.kit_body)
-print( kit_response.status_code)
-print(kit_response.json())
 
